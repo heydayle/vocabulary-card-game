@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { a, useSpring } from '@react-spring/three';
 import { RoundedBox, Text } from '@react-three/drei';
 import * as THREE from 'three';
+import notoSansFontUrl from '@fontsource/noto-sans/files/noto-sans-all-400-normal.woff2';
 import type { Card } from '../../models/Card';
 import { useUIStore } from '../../stores/useUIStore';
 
@@ -167,6 +168,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
           maxWidth={1.9}
           anchorX="center"
           anchorY="middle"
+          font={notoSansFontUrl}
           material-side={THREE.FrontSide}
         >
           {frontText}
@@ -179,6 +181,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
             maxWidth={2}
             anchorX="center"
             anchorY="middle"
+            font={notoSansFontUrl}
             material-side={THREE.FrontSide}
           >
             {phonetics}
@@ -191,6 +194,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
           maxWidth={2}
           anchorX="center"
           anchorY="top"
+          font={notoSansFontUrl}
           material-side={THREE.FrontSide}
         >
           Tap or press Space to flip
@@ -204,6 +208,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
           maxWidth={2.1}
           anchorX="center"
           anchorY="middle"
+          font={notoSansFontUrl}
           material-side={THREE.FrontSide}
         >
           {backText}
@@ -216,6 +221,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
             maxWidth={2.2}
             anchorX="center"
             anchorY="middle"
+            font={notoSansFontUrl}
             material-side={THREE.FrontSide}
           >
             “{example}”
