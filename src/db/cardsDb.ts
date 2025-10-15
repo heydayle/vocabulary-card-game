@@ -40,14 +40,14 @@ export class CardsRepo {
 
   static async incrementCorrect(id: string): Promise<void> {
     await cardsDb.cards.update(id, {
-      correctCount: Dexie.increment(1),
+      correctCount: (value = 0) => value + 1,
       updatedAt: Date.now()
     });
   }
 
   static async incrementWrong(id: string): Promise<void> {
     await cardsDb.cards.update(id, {
-      wrongCount: Dexie.increment(1),
+      wrongCount: (value = 0) => value + 1,
       updatedAt: Date.now()
     });
   }

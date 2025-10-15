@@ -1,3 +1,4 @@
+/// <reference types="three" />
 /// <reference types="vite/client" />
 
 declare module '*.woff' {
