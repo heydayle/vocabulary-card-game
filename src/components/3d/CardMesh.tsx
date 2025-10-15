@@ -67,7 +67,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
         }
       });
       flipApi.start({
-        from: Math.PI,
+        from: { rotationY: Math.PI },
         to: async (next) => {
           await next({ rotationY: Math.PI * 1.1 });
           await next({ rotationY: Math.PI * 0.35 });
