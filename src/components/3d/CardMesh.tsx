@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { a, useSpring } from '@react-spring/three';
 import { RoundedBox, Text } from '@react-three/drei';
+import * as THREE from 'three';
 import type { Card } from '../../models/Card';
 import { useUIStore } from '../../stores/useUIStore';
 
@@ -166,6 +167,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
           maxWidth={1.9}
           anchorX="center"
           anchorY="middle"
+          material-side={THREE.FrontSide}
         >
           {frontText}
         </Text>
@@ -177,6 +179,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
             maxWidth={2}
             anchorX="center"
             anchorY="middle"
+            material-side={THREE.FrontSide}
           >
             {phonetics}
           </Text>
@@ -188,11 +191,12 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
           maxWidth={2}
           anchorX="center"
           anchorY="top"
+          material-side={THREE.FrontSide}
         >
           Tap or press Space to flip
         </Text>
       </group>
-      <group rotation={[0, Math.PI, 0]} position={[0, 0, 0.02]}>
+      <group rotation={[0, Math.PI, 0]} position={[0, 0, -0.02]}>
         <Text
           position={[0, 0.5, 0.03]}
           fontSize={0.24}
@@ -200,6 +204,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
           maxWidth={2.1}
           anchorX="center"
           anchorY="middle"
+          material-side={THREE.FrontSide}
         >
           {backText}
         </Text>
@@ -211,6 +216,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
             maxWidth={2.2}
             anchorX="center"
             anchorY="middle"
+            material-side={THREE.FrontSide}
           >
             “{example}”
           </Text>
