@@ -1,0 +1,24 @@
+.page {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.glass {
+  background: rgba(15, 23, 42, 0.55);
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  padding: 2rem;
+  color: #e2e8f0;
+  max-width: 720px;
+  box-shadow: 0 15px 45px rgba(15, 23, 42, 0.45);
+}
+
+.glass ol {
+  padding-left: 1.2rem;
+  line-height: 1.7;
+}
+
+.glass .muted {
+  opacity: 0.7;
+}
