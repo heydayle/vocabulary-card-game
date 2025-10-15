@@ -59,10 +59,10 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
 
     if (isNewCard) {
       motionApi.start({
-        from: { position: [0, -0.26, -0.48], rotation: [-0.55, 0, 0] },
+        from: { position: [0, -0.26, -0.48], rotation: [0, 0, 0] },
         to: async (next) => {
-          await next({ position: [0, 0.36, -0.28], rotation: [-0.22, 0.24, 0.04] });
-          await next({ position: [0, 0.28, -0.08], rotation: [-0.14, 0.08, 0] });
+          await next({ position: [0, 4, -0.28], rotation: [-0.22, 0.24, 0.04] });
+          await next({ position: [0, 4, -0.08], rotation: [-0.14, 0.08, 0] });
           await next({ position: basePosition, rotation: baseRotation });
         }
       });
@@ -104,7 +104,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
     if (flipped) {
       motionApi.start({
         to: [
-          { position: [0, 0.22, 0], rotation: [-0.12, 0, 0] },
+          { position: [0, 4, 0], rotation: [-0.12, 0, 0] },
           { position: basePosition, rotation: baseRotation }
         ]
       });
@@ -120,7 +120,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
     if (previous) {
       motionApi.start({
         to: [
-          { position: [0, 0.2, 0], rotation: [-0.08, 0, 0] },
+          { position: [0, 4, 0], rotation: [-0.08, 0, 0] },
           { position: basePosition, rotation: baseRotation }
         ]
       });
