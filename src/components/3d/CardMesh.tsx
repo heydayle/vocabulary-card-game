@@ -13,7 +13,7 @@ interface CardMeshProps {
   onFlip: () => void;
 }
 
-const basePosition: [number, number, number] = [0, 0, 0];
+const basePosition: [number, number, number] = [0, 1.5, 0];
 const baseRotation: [number, number, number] = [-0.04, 0, 0];
 
 export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
@@ -36,7 +36,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
   useEffect(() => {
     if (!card) {
       motionApi.start({
-        position: [0, -0.18, 0],
+        position: [0, 0, 0],
         rotation: [0, 0, 0],
         immediate: lowMotion
       });

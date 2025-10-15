@@ -18,10 +18,6 @@ export const Deck = ({ count, shuffleKey }: DeckProps) => {
   }));
 
   useEffect(() => {
-    if (!count) {
-      api.start({ position: [0, 0, 0], rotation: [0, 0, 0], immediate: true });
-      return;
-    }
 
     if (lowMotion) {
       api.start({ position: [0, 0, 0], rotation: [0, 0, 0], immediate: true });
@@ -29,12 +25,7 @@ export const Deck = ({ count, shuffleKey }: DeckProps) => {
     }
 
     api.start({
-      from: { position: [0, 0, 0], rotation: [0, 0, 0] },
-      to: [
-        { position: [0.12, 0, 0.06], rotation: [0.2, Math.PI / 4, 0.12] },
-        { position: [-0.1, 0, -0.08], rotation: [-0.18, -Math.PI / 3.2, -0.1] },
-        { position: [0, 0, 0], rotation: [0, 0, 0] }
-      ]
+      from: { position: [0, 1.50, 0], rotation: [0, 0, 0] },
     });
   }, [shuffleKey, count, lowMotion, api]);
 

@@ -23,8 +23,8 @@ const SceneContent = () => {
 
   return (
     <group>
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[5, 6, 5]} intensity={1.3} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
+      <ambientLight intensity={0.2} />
+      <directionalLight position={[5, 6, 5]} intensity={1} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
       <pointLight position={[-4, 4, -4]} intensity={0.4} />
 
       <Table />
@@ -45,7 +45,7 @@ const SceneContent = () => {
 
 export const Scene = () => (
   <div className="scene-container">
-    <Canvas shadows camera={{ position: [4, 4, 6], fov: 45 }}>
+    <Canvas shadows camera={{ position: [4, 4, 6], fov: 70 }}>
       <color attach="background" args={[0.05, 0.08, 0.15]} />
       <Suspense fallback={null}>
         <SceneContent />
