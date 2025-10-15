@@ -29,6 +29,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
   const prevCardId = useRef<string | undefined>();
   const prevDrawKey = useRef(drawKey);
   const prevFlipped = useRef(flipped);
+  const lastFlipCardId = useRef<string | undefined>();
 
   useEffect(() => {
     if (!card) {
@@ -40,6 +41,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
       flipApi.start({ rotationY: 0, immediate: lowMotion });
       prevCardId.current = undefined;
       prevDrawKey.current = drawKey;
+      lastFlipCardId.current = undefined;
       return;
     }
 
@@ -55,13 +57,21 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
 
     if (isNewCard) {
       motionApi.start({
-        from: { position: [0, -0.22, -0.42], rotation: [-0.42, 0, 0] },
-        to: [
-          { position: [0, 0.26, -0.12], rotation: [-0.16, 0, 0] },
-          { position: basePosition, rotation: baseRotation }
-        ]
+        from: { position: [0, -0.26, -0.48], rotation: [-0.55, 0, 0] },
+        to: async (next) => {
+          await next({ position: [0, 0.36, -0.28], rotation: [-0.22, 0.24, 0.04] });
+          await next({ position: [0, 0.28, -0.08], rotation: [-0.14, 0.08, 0] });
+          await next({ position: basePosition, rotation: baseRotation });
+        }
       });
-      flipApi.start({ rotationY: 0 });
+      flipApi.start({
+        from: Math.PI,
+        to: async (next) => {
+          await next({ rotationY: Math.PI * 1.1 });
+          await next({ rotationY: Math.PI * 0.35 });
+          await next({ rotationY: 0 });
+        }
+      });
     }
 
     prevCardId.current = card.id;
@@ -70,6 +80,12 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
 
   useEffect(() => {
     if (!card) {
+      prevFlipped.current = flipped;
+      return;
+    }
+
+    if (card.id !== lastFlipCardId.current) {
+      lastFlipCardId.current = card.id;
       prevFlipped.current = flipped;
       return;
     }
@@ -133,7 +149,7 @@ export const CardMesh = ({ card, flipped, drawKey, onFlip }: CardMeshProps) => {
       onClick={onFlip}
       onPointerDown={(event) => event.stopPropagation()}
     >
-      <RoundedBox args={[2.45, 3.45, 0.035]} radius={0.05} smoothness={4} castShadow receiveShadow>
+      <RoundedBox args={[2.45, 3.45, 0.028]} radius={0.05} smoothness={4} castShadow receiveShadow>
         <meshPhysicalMaterial
           color={flipped ? '#fef3c7' : '#e2e8f0'}
           metalness={0.1}
