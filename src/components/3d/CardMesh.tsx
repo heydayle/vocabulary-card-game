@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { a, useSpring } from '@react-spring/three';
 import { RoundedBox, Text } from '@react-three/drei';
 import * as THREE from 'three';
-import notoSansFontUrl from '@fontsource/noto-sans/files/noto-sans-latin-ext-400-normal.woff2';
+import notoSansFontUrl from '@fontsource/noto-sans/files/noto-sans-latin-ext-400-normal.woff';
 import type { Card } from '../../models/Card';
 import { useUIStore } from '../../stores/useUIStore';
 
