@@ -16,7 +16,7 @@ const Table = () => (
 
 const SceneContent = () => {
   const { cards } = useCardsStore();
-  const { snapshot, currentCard, flip } = useGameStore();
+  const { snapshot, currentCard, flip, shuffleKey, drawKey } = useGameStore();
 
   const remaining = useMemo(() => Math.max(cards.length - (snapshot.index + 1), 0), [cards.length, snapshot.index]);
   const showSparkles = snapshot.phase === 'judged' && snapshot.flipped;
@@ -29,13 +29,13 @@ const SceneContent = () => {
 
       <Table />
 
-      <group position={[0, 0, 0.2]}>
-        <Deck count={Math.min(remaining, 12)} />
+      <group position={[0, 0.02, 0.12]}>
+        <Deck count={Math.min(remaining, 12)} shuffleKey={shuffleKey} />
       </group>
 
-      <group position={[0, 0.1, 0.3]}>
-        <CardMesh card={currentCard} flipped={snapshot.flipped} onFlip={flip} />
-        {showSparkles ? <Sparkles count={30} scale={2.5} position-y={1.2} speed={0.5} size={4} /> : null}
+      <group position={[0, 0.12, 0.32]}>
+        <CardMesh card={currentCard} flipped={snapshot.flipped} drawKey={drawKey} onFlip={flip} />
+        {showSparkles ? <Sparkles count={35} scale={1.8} position={[0, 0.8, 0]} speed={0.6} size={3.2} /> : null}
       </group>
 
       <ContactShadows position={[0, -0.35, 0]} opacity={0.4} scale={10} blur={2.5} far={4} />
