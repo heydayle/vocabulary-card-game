@@ -3,8 +3,6 @@ import { useGameStore } from '../../stores/useGameStore';
 import { useCardsStore } from '../../stores/useCardsStore';
 import { useUIStore } from '../../stores/useUIStore';
 import { useSpeech } from '../../hooks/useSpeech';
-import './GamePanel.css';
-
 export const GamePanel = () => {
   const { cards } = useCardsStore();
   const speak = useSpeech();
@@ -45,65 +43,69 @@ export const GamePanel = () => {
     snapshot.phase === 'complete' ? progressTotal : Math.min(snapshot.index + 1, progressTotal);
 
   return (
-    <aside className="game-panel">
-      <div className="panel-section">
-        <h2>Practice Deck</h2>
-        <p className="muted">
+    <aside className="flex w-full max-w-full flex-col gap-6 p-6 text-slate-100 lg:w-96">
+      <div className="panel-card">
+        <h2 className="text-lg font-semibold">Practice Deck</h2>
+        <p className="text-slate-200/70">
           Flip the card with <strong>Space</strong>, mark with <strong>J</strong> (Correct) or{' '}
           <strong>K</strong> (Wrong), draw next using <strong>N</strong>.
         </p>
-        <div className="panel-controls">
-          <button onClick={shuffle} disabled={!progressTotal}>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <button
+            className="control-button"
+            onClick={shuffle}
+            disabled={!progressTotal}
+          >
             Shuffle
           </button>
-          <button onClick={flip} disabled={!progressTotal}>
+          <button className="control-button" onClick={flip} disabled={!progressTotal}>
             Flip
           </button>
-          <button onClick={() => void markCorrect()} disabled={!progressTotal}>
+          <button className="control-button" onClick={() => void markCorrect()} disabled={!progressTotal}>
             Correct
           </button>
-          <button onClick={() => void markWrong()} disabled={!progressTotal}>
+          <button className="control-button" onClick={() => void markWrong()} disabled={!progressTotal}>
             Wrong
           </button>
-          <button onClick={next} disabled={!progressTotal}>
+          <button className="control-button" onClick={next} disabled={!progressTotal}>
             Next
           </button>
         </div>
-        <div className="panel-progress">
-          <span>
+        <div className="mt-4 flex justify-between text-sm text-slate-200/80">
+          <span className="font-medium">
             Progress: {progressCurrent}/{progressTotal}
           </span>
-          <span>
+          <span className="font-medium">
             ✅ {snapshot.correct} &nbsp; ⚠️ {snapshot.wrong}
           </span>
         </div>
       </div>
 
-      <div className="panel-section">
+      <div className="panel-card">
         {currentCard ? (
           <>
-            <div className="card-headline">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <h3>{currentCard.word}</h3>
-                {currentCard.phonetics && <p className="muted">{currentCard.phonetics}</p>}
+                <h3 className="text-lg font-semibold text-white">{currentCard.word}</h3>
+                {currentCard.phonetics && <p className="text-sm text-slate-200/70">{currentCard.phonetics}</p>}
               </div>
               <button
-                className="icon-button"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-slate-500/20 text-lg text-slate-100 transition duration-200 ease-out hover:bg-slate-500/30"
                 onClick={() => speak(currentCard.word)}
                 aria-label={`Speak ${currentCard.word}`}
               >
                 🔊
               </button>
             </div>
-            <div className="card-body">
+            <div className="mt-3 flex flex-col gap-2">
               {snapshot.flipped || snapshot.phase !== 'showingFront' ? (
                 <>
-                  <p>{currentCard.definition}</p>
-                  {currentCard.example && <p className="muted">“{currentCard.example}”</p>}
+                  <p className="leading-relaxed text-slate-100">{currentCard.definition}</p>
+                  {currentCard.example && <p className="italic text-slate-200/70">“{currentCard.example}”</p>}
                   {currentCard.tags?.length ? (
-                    <div className="tags">
+                    <div className="mt-2 flex flex-wrap gap-2">
                       {currentCard.tags.map((tag) => (
-                        <span key={tag} className="tag">
+                        <span key={tag} className="rounded-full bg-sky-500/20 px-3 py-1 text-xs text-slate-100">
                           #{tag}
                         </span>
                       ))}
@@ -111,33 +113,33 @@ export const GamePanel = () => {
                   ) : null}
                 </>
               ) : (
-                <p className="muted">Think of the meaning then flip the card.</p>
+                <p className="text-sm text-slate-200/70">Think of the meaning then flip the card.</p>
               )}
             </div>
           </>
         ) : (
-          <div className="empty">
-            <h3>No cards yet</h3>
-            <p>Create a card to get started.</p>
+          <div className="text-center text-slate-200/70">
+            <h3 className="text-lg font-semibold text-white">No cards yet</h3>
+            <p className="text-sm">Create a card to get started.</p>
           </div>
         )}
       </div>
 
       {!lowMotion && (
-        <div className="panel-section keyboard">
-          <h4>Shortcuts</h4>
-          <ul>
-            <li>
-              <kbd>Space</kbd> Flip
+        <div className="panel-card">
+          <h4 className="text-sm font-semibold text-slate-200">Shortcuts</h4>
+          <ul className="mt-2 grid list-none gap-1 p-0 text-sm text-slate-200/80">
+            <li className="flex items-center gap-2">
+              <kbd className="rounded-md bg-slate-500/20 px-2 py-1 text-sm text-slate-100">Space</kbd> Flip
             </li>
-            <li>
-              <kbd>J</kbd> Mark Correct
+            <li className="flex items-center gap-2">
+              <kbd className="rounded-md bg-slate-500/20 px-2 py-1 text-sm text-slate-100">J</kbd> Mark Correct
             </li>
-            <li>
-              <kbd>K</kbd> Mark Wrong
+            <li className="flex items-center gap-2">
+              <kbd className="rounded-md bg-slate-500/20 px-2 py-1 text-sm text-slate-100">K</kbd> Mark Wrong
             </li>
-            <li>
-              <kbd>N</kbd> Next Card
+            <li className="flex items-center gap-2">
+              <kbd className="rounded-md bg-slate-500/20 px-2 py-1 text-sm text-slate-100">N</kbd> Next Card
             </li>
           </ul>
         </div>

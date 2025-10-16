@@ -5,7 +5,6 @@ import CardMesh from './CardMesh';
 import Deck from './Deck';
 import { useGameStore } from '../../stores/useGameStore';
 import { useCardsStore } from '../../stores/useCardsStore';
-import './Scene.css';
 
 const Table = () => (
   <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, 0]} receiveShadow>
@@ -44,7 +43,10 @@ const SceneContent = () => {
 };
 
 export const Scene = () => (
-  <div className="scene-container">
+  <div
+    className="scene-viewport flex-1 border-b border-slate-500/20 bg-glow lg:border-b-0 lg:border-r"
+    style={{ minHeight: '420px', height: 'calc(100vh - 80px)' }}
+  >
     <Canvas shadows camera={{ position: [4, 4, 6], fov: 70 }}>
       <color attach="background" args={[0.05, 0.08, 0.15]} />
       <Suspense fallback={null}>
