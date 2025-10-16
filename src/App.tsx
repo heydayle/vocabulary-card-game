@@ -35,7 +35,7 @@ const App = () => {
       <Header />
       <div className="flex flex-1 flex-col backdrop-blur-xl lg:flex-row">
         <Scene />
-        <div className="flex max-w-full flex-1 justify-center overflow-y-auto border-t border-slate-500/20 bg-slate-900/60 p-6 lg:w-96 lg:border-l lg:border-t-0">
+        <div className="flex max-w-full flex-1 justify-center overflow-y-auto border-t border-slate-500/20 bg-slate-900/60 p-6 lg:w-96 lg:border-l lg:border-t-0 lg:h-screen-minus-header lg:max-h-screen-minus-header">
           {content}
         </div>
       </div>

@@ -44,6 +44,7 @@ button {
 .w-11 { width: 2.75rem; }
 .w-full { width: 100%; }
 .max-w-full { max-width: 100%; }
+.overflow-y-auto { overflow-y: auto; }
 .max-w-xl { max-width: 36rem; }
 .max-w-3xl { max-width: 48rem; }
 .flex-1 { flex: 1 1 0%; }
@@ -171,6 +172,8 @@ button {
   .lg\:border-t-0 { border-top-width: 0; }
   .lg\:border-b-0 { border-bottom-width: 0; }
   .lg\:border-r { border-right-width: 1px; }
+  .lg\:h-screen-minus-header { height: calc(100vh - 5rem); }
+  .lg\:max-h-screen-minus-header { max-height: calc(100vh - 5rem); }
 }
 
 /* Component helper classes */
