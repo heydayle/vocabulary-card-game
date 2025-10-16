@@ -1,8 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { Card } from '../../models/Card';
 import { useCardsStore } from '../../stores/useCardsStore';
-import './CardList.css';
-
 interface EditableCard extends Card {
   isEditing?: boolean;
 }
@@ -70,14 +68,19 @@ export const CardList = () => {
   };
 
   return (
-    <div className="card-list">
-      <div className="card-list-controls">
+    <div className="flex flex-col gap-4 text-slate-100" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+      <div className="flex flex-wrap gap-4">
         <input
+          className="form-field"
           placeholder="Search word or meaning"
           value={search}
           onChange={(event) => setSearch(event.target.value)}
         />
-        <select value={activeTag} onChange={(event) => setActiveTag(event.target.value)}>
+        <select
+          className="form-field"
+          value={activeTag}
+          onChange={(event) => setActiveTag(event.target.value)}
+        >
           <option value="all">All Tags</option>
           {tags.map((tag) => (
             <option key={tag} value={tag}>
@@ -87,36 +90,41 @@ export const CardList = () => {
         </select>
       </div>
 
-      <div className="card-list-items">
+      <div className="grid gap-4">
         {filtered.map((card) => {
           const draft = editing[card.id];
           const item = draft ?? card;
           const tagString = Array.isArray(item.tags) ? item.tags.join(', ') : '';
           return (
-            <div key={card.id} className="card-list-item">
+            <div key={card.id} className="card-panel">
               {draft ? (
                 <>
                   <input
+                    className="form-field"
                     value={item.word}
                     onChange={(event) => handleChange(card.id, 'word', event.target.value)}
                   />
                   <textarea
+                    className="form-field"
                     value={item.definition}
                     onChange={(event) => handleChange(card.id, 'definition', event.target.value)}
                     rows={2}
                   />
                   <input
+                    className="form-field"
                     value={item.phonetics ?? ''}
                     onChange={(event) => handleChange(card.id, 'phonetics', event.target.value)}
                     placeholder="Phonetics"
                   />
                   <textarea
+                    className="form-field"
                     value={item.example ?? ''}
                     onChange={(event) => handleChange(card.id, 'example', event.target.value)}
                     rows={2}
                     placeholder="Example"
                   />
                   <input
+                    className="form-field"
                     value={tagString}
                     onChange={(event) =>
                       handleChange(
@@ -130,8 +138,9 @@ export const CardList = () => {
                     }
                     placeholder="tag1, tag2"
                   />
-                  <div className="actions">
+                  <div className="flex items-center gap-2">
                     <button
+                      className="action-button"
                       onClick={() =>
                         handleSave({
                           ...item,
@@ -141,32 +150,36 @@ export const CardList = () => {
                     >
                       Save
                     </button>
-                    <button className="secondary" onClick={() => handleEditToggle(card)}>
+                    <button className="action-button secondary" onClick={() => handleEditToggle(card)}>
                       Cancel
                     </button>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="item-header">
-                    <h3>{card.word}</h3>
-                    <div className="actions">
-                      <button onClick={() => handleEditToggle(card)}>Edit</button>
-                      <button className="danger" onClick={() => deleteCard(card.id)}>
+                  <div className="flex items-start justify-between gap-4">
+                    <h3 className="text-lg font-semibold text-white">{card.word}</h3>
+                    <div className="flex items-center gap-2">
+                      <button className="action-button" onClick={() => handleEditToggle(card)}>
+                        Edit
+                      </button>
+                      <button className="action-button danger" onClick={() => deleteCard(card.id)}>
                         Delete
                       </button>
                     </div>
                   </div>
-                  {card.phonetics && <p className="phonetics">{card.phonetics}</p>}
-                  <p>{card.definition}</p>
-                  {card.example && <p className="example">“{card.example}”</p>}
-                  <div className="meta">
-                    <span>
+                  {card.phonetics && <p className="text-sm text-slate-200/70">{card.phonetics}</p>}
+                  <p className="leading-relaxed text-slate-100">{card.definition}</p>
+                  {card.example && <p className="italic text-slate-200/70">“{card.example}”</p>}
+                  <div className="flex items-center justify-between text-xs text-slate-200/80">
+                    <span className="font-medium">
                       ✅ {card.correctCount} / ❌ {card.wrongCount}
                     </span>
-                    <div className="tags">
+                    <div className="flex flex-wrap gap-2">
                       {card.tags?.map((tag) => (
-                        <span key={tag}>#{tag}</span>
+                        <span key={tag} className="rounded-full bg-sky-500/20 px-3 py-1 text-xs text-slate-100">
+                          #{tag}
+                        </span>
                       ))}
                     </div>
                   </div>
@@ -175,7 +188,7 @@ export const CardList = () => {
             </div>
           );
         })}
-        {!filtered.length && <p className="empty">No cards match your filters yet.</p>}
+        {!filtered.length && <p className="text-center text-slate-200/60">No cards match your filters yet.</p>}
       </div>
     </div>
   );

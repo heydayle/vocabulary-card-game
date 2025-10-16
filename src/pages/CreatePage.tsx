@@ -1,8 +1,6 @@
 import CardForm from '../components/ui/CardForm';
-import './Page.css';
-
 export const CreatePage = () => (
-  <section className="page">
+  <section className="page-shell">
     <CardForm />
   </section>
 );
