@@ -9,6 +9,7 @@ export const GamePanel = () => {
   const { snapshot, currentCard, start, flip, markCorrect, markWrong, next, shuffle, reset } =
     useGameStore();
   const { lowMotion } = useUIStore();
+  const isShowingBack = snapshot.flipped || snapshot.phase !== 'showingFront';
 
   useEffect(() => {
     if (cards.length) {
@@ -62,8 +63,21 @@ export const GamePanel = () => {
                 </button>
               </div>
               <div className="play-card__body">
-                {snapshot.flipped || snapshot.phase !== 'showingFront' ? (
-                  <>
+                <div
+                  className={`play-card__flip${isShowingBack ? ' play-card__flip--flipped' : ''}${
+                    lowMotion ? ' play-card__flip--static' : ''
+                  }`}
+                >
+                  <div
+                    className="play-card__face play-card__face--front"
+                    aria-hidden={isShowingBack}
+                  >
+                    <p className="play-card__prompt">Visualize the meaning, then flip to reveal it.</p>
+                  </div>
+                  <div
+                    className="play-card__face play-card__face--back"
+                    aria-hidden={!isShowingBack}
+                  >
                     <p className="play-card__definition">{currentCard.definition}</p>
                     {currentCard.example && <p className="play-card__example">“{currentCard.example}”</p>}
                     {currentCard.tags?.length ? (
@@ -75,10 +89,8 @@ export const GamePanel = () => {
                         ))}
                       </div>
                     ) : null}
-                  </>
-                ) : (
-                  <p className="play-card__prompt">Visualize the meaning, then flip to reveal it.</p>
-                )}
+                  </div>
+                </div>
               </div>
             </>
           ) : (

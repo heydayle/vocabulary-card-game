@@ -532,6 +532,8 @@ button {
   flex-direction: column;
   gap: 1.5rem;
   justify-content: space-between;
+  position: relative;
+  perspective: 1600px;
 }
 
 .play-card__header {
@@ -555,9 +557,54 @@ button {
 }
 
 .play-card__body {
+  position: relative;
+  flex: 1;
+  display: flex;
+  min-height: 220px;
+}
+
+.play-card__flip {
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 640ms cubic-bezier(0.33, 1, 0.68, 1);
+  will-change: transform;
+}
+
+.play-card__flip--flipped {
+  transform: rotateY(180deg);
+}
+
+.play-card__flip--static {
+  transition-duration: 0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .play-card__flip {
+    transition-duration: 0ms;
+  }
+}
+
+.play-card__face {
+  grid-area: 1 / 1;
+  padding-top: 0.25rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.play-card__face--front {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.play-card__face--back {
+  transform: rotateY(180deg);
 }
 
 .play-card__definition {
