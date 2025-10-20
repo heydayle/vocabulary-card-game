@@ -8,21 +8,17 @@ const links: { key: PageKey; label: string }[] = [
 
 export const Header = () => {
   const { activePage, setActivePage, lowMotion, toggleLowMotion } = useUIStore();
-  const baseButtonClass =
-    'rounded-full border border-transparent bg-slate-500/10 px-4 py-2 text-sm font-medium text-slate-200 transition duration-200 ease-out hover:bg-slate-500/30';
-  const activeButtonClass =
-    'bg-gradient-to-br from-sky-400/70 to-blue-500/70 border-slate-500/30 text-white shadow-md';
+  const baseButtonClass = 'nav-button';
+  const activeButtonClass = 'nav-button nav-button--active';
 
   return (
-    <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-500/20 bg-slate-900/40 px-8 py-4 backdrop-blur-xl">
-      <div className="text-xl font-semibold">✨ LexiPlay</div>
-      <nav className="flex items-center gap-3">
+    <header className="app-header">
+      <div className="brand">✨ LexiPlay</div>
+      <nav className="nav-group">
         {links.map((link) => (
           <button
             key={link.key}
-            className={
-              link.key === activePage ? `${baseButtonClass} ${activeButtonClass}` : baseButtonClass
-            }
+            className={link.key === activePage ? activeButtonClass : baseButtonClass}
             onClick={() => setActivePage(link.key)}
           >
             {link.label}
