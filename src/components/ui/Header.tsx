@@ -1,13 +1,12 @@
 import { useUIStore, type PageKey } from '../../stores/useUIStore';
 const links: { key: PageKey; label: string }[] = [
   { key: 'learn', label: 'Learn' },
-  { key: 'create', label: 'Create' },
   { key: 'manage', label: 'Manage' },
   { key: 'play', label: 'Play' }
 ];
 
 export const Header = () => {
-  const { activePage, setActivePage, lowMotion, toggleLowMotion } = useUIStore();
+  const { activePage, setActivePage, lowMotion, toggleLowMotion, openCreateModal } = useUIStore();
   const baseButtonClass = 'nav-button';
   const activeButtonClass = 'nav-button nav-button--active';
 
@@ -25,9 +24,14 @@ export const Header = () => {
           </button>
         ))}
       </nav>
-      <button className={baseButtonClass} onClick={toggleLowMotion} aria-pressed={lowMotion}>
-        {lowMotion ? 'Enable Motion' : 'Low Motion'}
-      </button>
+      <div className="header-actions">
+        <button className="action-button" type="button" onClick={openCreateModal}>
+          + New Word
+        </button>
+        <button className={baseButtonClass} onClick={toggleLowMotion} aria-pressed={lowMotion}>
+          {lowMotion ? 'Enable Motion' : 'Low Motion'}
+        </button>
+      </div>
     </header>
   );
 };

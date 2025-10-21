@@ -4,12 +4,13 @@ import { GamePanel } from './components/ui/GamePanel';
 import { useCardsStore } from './stores/useCardsStore';
 import { useUIStore } from './stores/useUIStore';
 import LearnPage from './pages/LearnPage';
-import CreatePage from './pages/CreatePage';
 import ManagePage from './pages/ManagePage';
+import { CreateModal } from './components/ui/CreateModal';
 const App = () => {
   const init = useCardsStore((state) => state.init);
   const loading = useCardsStore((state) => state.loading);
   const activePage = useUIStore((state) => state.activePage);
+  const isCreateModalOpen = useUIStore((state) => state.isCreateModalOpen);
 
   useEffect(() => {
     void init();
@@ -19,8 +20,6 @@ const App = () => {
     switch (activePage) {
       case 'learn':
         return <LearnPage />;
-      case 'create':
-        return <CreatePage />;
       case 'manage':
         return <ManagePage />;
       case 'play':
@@ -35,6 +34,7 @@ const App = () => {
       <div className="app-orb app-orb--two" aria-hidden="true" />
       <Header />
       <main className="app-main">{content}</main>
+      {isCreateModalOpen ? <CreateModal /> : null}
       {loading ? <div className="loading-pill">Loading your deck…</div> : null}
     </div>
   );

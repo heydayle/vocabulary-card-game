@@ -1,6 +1,23 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useCardsStore } from '../../stores/useCardsStore';
-export const CardForm = () => {
+
+interface CardFormProps {
+  onComplete?: () => void;
+  className?: string;
+  showSuccessMessage?: boolean;
+  title?: string | null;
+  submitLabel?: string;
+  autoFocus?: boolean;
+}
+
+export const CardForm = ({
+  onComplete,
+  className,
+  showSuccessMessage = true,
+  title = 'Create Card',
+  submitLabel = 'Save Card',
+  autoFocus = false
+}: CardFormProps) => {
   const addCard = useCardsStore((state) => state.addCard);
   const [word, setWord] = useState('');
   const [definition, setDefinition] = useState('');
@@ -10,10 +27,10 @@ export const CardForm = () => {
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    if (!success) return;
+    if (!showSuccessMessage || !success) return;
     const timer = window.setTimeout(() => setSuccess(''), 2200);
     return () => window.clearTimeout(timer);
-  }, [success]);
+  }, [success, showSuccessMessage]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,7 +45,11 @@ export const CardForm = () => {
         .map((tag) => tag.trim())
         .filter(Boolean)
     });
-    setSuccess('Card saved to your deck!');
+    if (onComplete) {
+      onComplete();
+    } else if (showSuccessMessage) {
+      setSuccess('Card saved to your deck!');
+    }
     setWord('');
     setDefinition('');
     setPhonetics('');
@@ -37,13 +58,20 @@ export const CardForm = () => {
   };
 
   const fieldClass = 'form-field';
+  const formClass = className ? className : 'glass-panel card-form';
 
   return (
-    <form className="glass-panel card-form" onSubmit={handleSubmit}>
-      <h2 className="text-lg font-semibold">Create Card</h2>
+    <form className={formClass} onSubmit={handleSubmit}>
+      {title ? <h2 className="text-lg font-semibold">{title}</h2> : null}
       <label className="form-label">
         Word
-        <input className={fieldClass} value={word} onChange={(event) => setWord(event.target.value)} required />
+        <input
+          className={fieldClass}
+          value={word}
+          onChange={(event) => setWord(event.target.value)}
+          required
+          autoFocus={autoFocus}
+        />
       </label>
       <label className="form-label">
         Definition (Vietnamese)
@@ -73,9 +101,9 @@ export const CardForm = () => {
         <input className={fieldClass} value={tags} onChange={(event) => setTags(event.target.value)} />
       </label>
       <button type="submit" className="action-button">
-        Save Card
+        {submitLabel}
       </button>
-      {success && <p className="text-sm text-emerald-400">{success}</p>}
+      {showSuccessMessage && success ? <p className="text-sm text-emerald-400">{success}</p> : null}
     </form>
   );
 };

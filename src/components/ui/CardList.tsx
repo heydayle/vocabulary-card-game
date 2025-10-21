@@ -1,12 +1,14 @@
 import { useMemo, useState } from 'react';
 import type { Card } from '../../models/Card';
 import { useCardsStore } from '../../stores/useCardsStore';
+import { useUIStore } from '../../stores/useUIStore';
 interface EditableCard extends Card {
   isEditing?: boolean;
 }
 
 export const CardList = () => {
   const { cards, deleteCard, updateCard } = useCardsStore();
+  const openCreateModal = useUIStore((state) => state.openCreateModal);
   const [search, setSearch] = useState('');
   const [activeTag, setActiveTag] = useState('all');
 
@@ -90,6 +92,9 @@ export const CardList = () => {
             ))}
           </select>
         </div>
+        <button type="button" className="action-button" onClick={openCreateModal}>
+          + New Word
+        </button>
       </div>
 
       <div className="manage-grid">
