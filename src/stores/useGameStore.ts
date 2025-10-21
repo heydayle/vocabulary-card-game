@@ -13,6 +13,7 @@ interface GameState {
   markCorrect: () => Promise<void>;
   markWrong: () => Promise<void>;
   next: () => void;
+  previous: () => void;
   shuffle: () => void;
   reset: () => void;
 }
@@ -104,6 +105,37 @@ export const useGameStore = create<GameState>((set, get) => ({
     };
     const drawKey = get().drawKey + 1;
     set({ snapshot: nextSnapshot, currentCard: deriveCurrent(nextSnapshot), drawKey });
+  },
+  previous: () => {
+    const snapshot = get().snapshot;
+    if (!snapshot.deck.length) return;
+
+    if (snapshot.phase === 'complete') {
+      const previousIndex = snapshot.deck.length - 1;
+      const previousSnapshot: GameSnapshot = {
+        ...snapshot,
+        index: previousIndex,
+        phase: 'showingFront',
+        flipped: false
+      };
+      const drawKey = get().drawKey + 1;
+      set({ snapshot: previousSnapshot, currentCard: deriveCurrent(previousSnapshot), drawKey });
+      return;
+    }
+
+    const previousIndex = snapshot.index - 1;
+    if (previousIndex < 0) {
+      return;
+    }
+
+    const previousSnapshot: GameSnapshot = {
+      ...snapshot,
+      index: previousIndex,
+      phase: 'showingFront',
+      flipped: false
+    };
+    const drawKey = get().drawKey + 1;
+    set({ snapshot: previousSnapshot, currentCard: deriveCurrent(previousSnapshot), drawKey });
   },
   shuffle: () => {
     const snapshot = get().snapshot;

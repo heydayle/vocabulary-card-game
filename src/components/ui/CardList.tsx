@@ -1,12 +1,14 @@
 import { useMemo, useState } from 'react';
 import type { Card } from '../../models/Card';
 import { useCardsStore } from '../../stores/useCardsStore';
+import { useUIStore } from '../../stores/useUIStore';
 interface EditableCard extends Card {
   isEditing?: boolean;
 }
 
 export const CardList = () => {
   const { cards, deleteCard, updateCard } = useCardsStore();
+  const openCreateModal = useUIStore((state) => state.openCreateModal);
   const [search, setSearch] = useState('');
   const [activeTag, setActiveTag] = useState('all');
 
@@ -68,35 +70,40 @@ export const CardList = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 text-slate-100" style={{ maxHeight: 'calc(100vh - 180px)' }}>
-      <div className="flex flex-wrap gap-4">
-        <input
-          className="form-field"
-          placeholder="Search word or meaning"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-        />
-        <select
-          className="form-field"
-          value={activeTag}
-          onChange={(event) => setActiveTag(event.target.value)}
-        >
-          <option value="all">All Tags</option>
-          {tags.map((tag) => (
-            <option key={tag} value={tag}>
-              {tag}
-            </option>
-          ))}
-        </select>
+    <div className="manage-stack">
+      <div className="glass-panel manage-toolbar">
+        <div className="toolbar-fields">
+          <input
+            className="form-field"
+            placeholder="Search word or meaning"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+          <select
+            className="form-field"
+            value={activeTag}
+            onChange={(event) => setActiveTag(event.target.value)}
+          >
+            <option value="all">All Tags</option>
+            {tags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button type="button" className="action-button" onClick={openCreateModal}>
+          + New Word
+        </button>
       </div>
 
-      <div className="grid gap-4">
+      <div className="manage-grid">
         {filtered.map((card) => {
           const draft = editing[card.id];
           const item = draft ?? card;
           const tagString = Array.isArray(item.tags) ? item.tags.join(', ') : '';
           return (
-            <div key={card.id} className="card-panel">
+            <div key={card.id} className="glass-panel card-panel">
               {draft ? (
                 <>
                   <input
@@ -177,7 +184,7 @@ export const CardList = () => {
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {card.tags?.map((tag) => (
-                        <span key={tag} className="rounded-full bg-sky-500/20 px-3 py-1 text-xs text-slate-100">
+                        <span key={tag} className="tag-chip">
                           #{tag}
                         </span>
                       ))}
