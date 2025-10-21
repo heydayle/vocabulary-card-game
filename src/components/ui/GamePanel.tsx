@@ -43,56 +43,61 @@ export const GamePanel = () => {
   const progressCurrent =
     snapshot.phase === 'complete' ? progressTotal : Math.min(snapshot.index + 1, progressTotal);
 
+  const renderHeader = (card: typeof currentCard) => {
+    if (!card) {
+      return null;
+    }
+
+    return (
+      <div className="play-card__header">
+        <div>
+          <h2 className="play-card__title">{card.word}</h2>
+          {card.phonetics && <p className="play-card__subtitle">{card.phonetics}</p>}
+        </div>
+        <button
+          className="speak-button"
+          onClick={() => speak(card.word)}
+          aria-label={`Speak ${card.word}`}
+        >
+          🔊
+        </button>
+      </div>
+    );
+  };
+
   return (
     <section className="page-shell play-shell">
       <div className="play-grid">
         <div className="glass-panel play-card">
           {currentCard ? (
-            <>
-              <div className="play-card__header">
-                <div>
-                  <h2 className="play-card__title">{currentCard.word}</h2>
-                  {currentCard.phonetics && <p className="play-card__subtitle">{currentCard.phonetics}</p>}
+            <div
+              className={`play-card__flip${isShowingBack ? ' play-card__flip--flipped' : ''}${
+                lowMotion ? ' play-card__flip--static' : ''
+              }`}
+            >
+              <article className="play-card__face play-card__face--front" aria-hidden={isShowingBack}>
+                {renderHeader(currentCard)}
+                <div className="play-card__body play-card__body--front">
+                  <p className="play-card__prompt">Visualize the meaning, then flip to reveal it.</p>
                 </div>
-                <button
-                  className="speak-button"
-                  onClick={() => speak(currentCard.word)}
-                  aria-label={`Speak ${currentCard.word}`}
-                >
-                  🔊
-                </button>
-              </div>
-              <div className="play-card__body">
-                <div
-                  className={`play-card__flip${isShowingBack ? ' play-card__flip--flipped' : ''}${
-                    lowMotion ? ' play-card__flip--static' : ''
-                  }`}
-                >
-                  <div
-                    className="play-card__face play-card__face--front"
-                    aria-hidden={isShowingBack}
-                  >
-                    <p className="play-card__prompt">Visualize the meaning, then flip to reveal it.</p>
-                  </div>
-                  <div
-                    className="play-card__face play-card__face--back"
-                    aria-hidden={!isShowingBack}
-                  >
-                    <p className="play-card__definition">{currentCard.definition}</p>
-                    {currentCard.example && <p className="play-card__example">“{currentCard.example}”</p>}
-                    {currentCard.tags?.length ? (
-                      <div className="play-card__tags">
-                        {currentCard.tags.map((tag) => (
-                          <span key={tag} className="tag-chip">
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
-                  </div>
+              </article>
+              <article className="play-card__face play-card__face--back" aria-hidden={!isShowingBack}>
+                {renderHeader(currentCard)}
+                <div className="play-card__body">
+                  <p className="play-card__definition">{currentCard.definition}</p>
+                  {currentCard.example && <p className="play-card__example">“{currentCard.example}”</p>}
+                  {currentCard.tags?.length ? (
+                    <div className="play-card__tags">
+                      {currentCard.tags.map((tag) => (
+                        <span key={tag} className="tag-chip">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
-              </div>
-            </>
+              </article>
+            </div>
           ) : (
             <div className="play-card__empty">
               <h2 className="play-card__title">No cards yet</h2>
