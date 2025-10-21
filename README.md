@@ -1,5 +1,7 @@
 # LexiPlay – Liquid Glass Vocabulary Studio
 
+<img width="1676" height="827" alt="image" src="https://github.com/user-attachments/assets/d6ede7fd-1fee-4feb-9650-002b408e0cda" />
+
 An immersive vocabulary trainer with a liquid-glass inspired interface that helps learners practice English vocabulary using bilingual flashcards. Cards are stored locally in IndexedDB, allowing you to create, manage, and play without any backend.
 
 ## Features
