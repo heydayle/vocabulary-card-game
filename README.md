@@ -1,10 +1,10 @@
-# LexiPlay – 3D Vocabulary Flashcards
+# LexiPlay – Liquid Glass Vocabulary Studio
 
-An interactive 3D mini-game built with React, Vite, and Three.js that helps learners practice English vocabulary using bilingual flashcards. Cards are stored locally in IndexedDB, allowing you to create, manage, and play without any backend.
+An immersive vocabulary trainer with a liquid-glass inspired interface that helps learners practice English vocabulary using bilingual flashcards. Cards are stored locally in IndexedDB, allowing you to create, manage, and play without any backend.
 
 ## Features
 
-- 🎴 3D playground with a card table, animated flips, and orbit controls.
+- 🫧 Liquid glass stage with layered depth, translucent cards, and soft lighting.
 - 🔊 Pronunciation via the Web Speech API with quick speaker buttons.
 - 🧠 Mini-game loop: shuffle → flip → self-assess → track stats.
 - ✍️ Full CRUD for flashcards (word, Vietnamese meaning, phonetics, examples, tags).
@@ -27,8 +27,7 @@ Then open the dev server URL shown in the console (usually http://localhost:5173
 ```
 src/
   components/
-    3d/        # Three.js / R3F meshes and scene setup
-    ui/        # Header, forms, panels, and lists
+    ui/        # Header, glass panels, and collection management
   db/          # Dexie database + seed data
   game/        # Game loop utilities and shuffle logic
   hooks/       # Custom hooks (speech synthesis)
@@ -46,7 +45,7 @@ src/
 
 ## Accessibility & Performance
 
-- Designed for 60 FPS rendering with lightweight lighting and materials.
+- Designed with GPU-accelerated gradients and blurs for smooth rendering.
 - Low-motion toggle reduces animation for motion-sensitive users.
 - Responsive layout adapts for tablets and smaller displays.
 

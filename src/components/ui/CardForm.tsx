@@ -1,6 +1,23 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useCardsStore } from '../../stores/useCardsStore';
-export const CardForm = () => {
+
+interface CardFormProps {
+  onComplete?: () => void;
+  className?: string;
+  showSuccessMessage?: boolean;
+  title?: string | null;
+  submitLabel?: string;
+  autoFocus?: boolean;
+}
+
+export const CardForm = ({
+  onComplete,
+  className,
+  showSuccessMessage = true,
+  title = 'Create Card',
+  submitLabel = 'Save Card',
+  autoFocus = false
+}: CardFormProps) => {
   const addCard = useCardsStore((state) => state.addCard);
   const [word, setWord] = useState('');
   const [definition, setDefinition] = useState('');
@@ -10,10 +27,10 @@ export const CardForm = () => {
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    if (!success) return;
+    if (!showSuccessMessage || !success) return;
     const timer = window.setTimeout(() => setSuccess(''), 2200);
     return () => window.clearTimeout(timer);
-  }, [success]);
+  }, [success, showSuccessMessage]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,7 +45,11 @@ export const CardForm = () => {
         .map((tag) => tag.trim())
         .filter(Boolean)
     });
-    setSuccess('Card saved to your deck!');
+    if (onComplete) {
+      onComplete();
+    } else if (showSuccessMessage) {
+      setSuccess('Card saved to your deck!');
+    }
     setWord('');
     setDefinition('');
     setPhonetics('');
@@ -36,20 +57,23 @@ export const CardForm = () => {
     setTags('');
   };
 
-  const fieldClass =
-    'rounded-xl border border-slate-500/20 bg-slate-900/80 px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400/40';
+  const fieldClass = 'form-field';
+  const formClass = className ? className : 'glass-panel card-form';
 
   return (
-    <form
-      className="flex w-full max-w-xl flex-col gap-3 rounded-2xl border border-slate-500/20 bg-slate-900/70 p-6 text-slate-100 shadow-lg"
-      onSubmit={handleSubmit}
-    >
-      <h2 className="text-lg font-semibold">Create Card</h2>
-      <label className="flex flex-col gap-1 text-sm text-slate-200/90">
+    <form className={formClass} onSubmit={handleSubmit}>
+      {title ? <h2 className="text-lg font-semibold">{title}</h2> : null}
+      <label className="form-label">
         Word
-        <input className={fieldClass} value={word} onChange={(event) => setWord(event.target.value)} required />
+        <input
+          className={fieldClass}
+          value={word}
+          onChange={(event) => setWord(event.target.value)}
+          required
+          autoFocus={autoFocus}
+        />
       </label>
-      <label className="flex flex-col gap-1 text-sm text-slate-200/90">
+      <label className="form-label">
         Definition (Vietnamese)
         <textarea
           className={fieldClass}
@@ -59,11 +83,11 @@ export const CardForm = () => {
           rows={3}
         />
       </label>
-      <label className="flex flex-col gap-1 text-sm text-slate-200/90">
+      <label className="form-label">
         Phonetics / IPA
         <input className={fieldClass} value={phonetics} onChange={(event) => setPhonetics(event.target.value)} />
       </label>
-      <label className="flex flex-col gap-1 text-sm text-slate-200/90">
+      <label className="form-label">
         Example sentence
         <textarea
           className={fieldClass}
@@ -72,17 +96,14 @@ export const CardForm = () => {
           rows={3}
         />
       </label>
-      <label className="flex flex-col gap-1 text-sm text-slate-200/90">
+      <label className="form-label">
         Tags (comma separated)
         <input className={fieldClass} value={tags} onChange={(event) => setTags(event.target.value)} />
       </label>
-      <button
-        type="submit"
-        className="inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-sky-400/80 to-blue-500/80 px-6 py-2 text-sm font-medium text-white shadow-md transition duration-200 ease-out hover:-translate-y-px"
-      >
-        Save Card
+      <button type="submit" className="action-button">
+        {submitLabel}
       </button>
-      {success && <p className="text-sm text-emerald-400">{success}</p>}
+      {showSuccessMessage && success ? <p className="text-sm text-emerald-400">{success}</p> : null}
     </form>
   );
 };
