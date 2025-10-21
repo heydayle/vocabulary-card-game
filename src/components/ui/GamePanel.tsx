@@ -6,8 +6,18 @@ import { useSpeech } from '../../hooks/useSpeech';
 export const GamePanel = () => {
   const { cards } = useCardsStore();
   const speak = useSpeech();
-  const { snapshot, currentCard, start, flip, markCorrect, markWrong, next, shuffle, reset } =
-    useGameStore();
+  const {
+    snapshot,
+    currentCard,
+    start,
+    flip,
+    markCorrect,
+    markWrong,
+    next,
+    previous,
+    shuffle,
+    reset
+  } = useGameStore();
   const { lowMotion } = useUIStore();
   const isShowingBack = snapshot.flipped || snapshot.phase !== 'showingFront';
 
@@ -42,6 +52,15 @@ export const GamePanel = () => {
   const progressTotal = snapshot.deck.length;
   const progressCurrent =
     snapshot.phase === 'complete' ? progressTotal : Math.min(snapshot.index + 1, progressTotal);
+  const canGoNext = progressTotal > 0 && snapshot.phase !== 'complete';
+  const canGoPrevious = progressTotal > 0 && (snapshot.phase === 'complete' || snapshot.index > 0);
+
+  const handleCardFlip = () => {
+    if (!currentCard) {
+      return;
+    }
+    flip();
+  };
 
   const renderHeader = (card: typeof currentCard) => {
     if (!card) {
@@ -56,7 +75,10 @@ export const GamePanel = () => {
         </div>
         <button
           className="speak-button"
-          onClick={() => speak(card.word)}
+          onClick={(event) => {
+            event.stopPropagation();
+            speak(card.word);
+          }}
           aria-label={`Speak ${card.word}`}
         >
           🔊
@@ -70,34 +92,71 @@ export const GamePanel = () => {
       <div className="play-grid">
         <div className="glass-panel play-card">
           {currentCard ? (
-            <div
-              className={`play-card__flip${isShowingBack ? ' play-card__flip--flipped' : ''}${
-                lowMotion ? ' play-card__flip--static' : ''
-              }`}
-            >
-              <article className="play-card__face play-card__face--front" aria-hidden={isShowingBack}>
-                {renderHeader(currentCard)}
-                <div className="play-card__body play-card__body--front">
-                  <p className="play-card__prompt">Visualize the meaning, then flip to reveal it.</p>
-                </div>
-              </article>
-              <article className="play-card__face play-card__face--back" aria-hidden={!isShowingBack}>
-                {renderHeader(currentCard)}
-                <div className="play-card__body">
-                  <p className="play-card__definition">{currentCard.definition}</p>
-                  {currentCard.example && <p className="play-card__example">“{currentCard.example}”</p>}
-                  {currentCard.tags?.length ? (
-                    <div className="play-card__tags">
-                      {currentCard.tags.map((tag) => (
-                        <span key={tag} className="tag-chip">
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-              </article>
-            </div>
+            <>
+              <div
+                className={`play-card__flip${isShowingBack ? ' play-card__flip--flipped' : ''}${
+                  lowMotion ? ' play-card__flip--static' : ''
+                }`}
+                role="button"
+                tabIndex={0}
+                onClick={handleCardFlip}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                    handleCardFlip();
+                  }
+                }}
+                aria-pressed={isShowingBack}
+                aria-label={isShowingBack ? 'Show front of card' : 'Show back of card'}
+              >
+                <article className="play-card__face play-card__face--front" aria-hidden={isShowingBack}>
+                  {renderHeader(currentCard)}
+                  <div className="play-card__body play-card__body--front">
+                    <p className="play-card__prompt">Visualize the meaning, then flip to reveal it.</p>
+                  </div>
+                </article>
+                <article className="play-card__face play-card__face--back" aria-hidden={!isShowingBack}>
+                  {renderHeader(currentCard)}
+                  <div className="play-card__body">
+                    <p className="play-card__definition">{currentCard.definition}</p>
+                    {currentCard.example && <p className="play-card__example">“{currentCard.example}”</p>}
+                    {currentCard.tags?.length ? (
+                      <div className="play-card__tags">
+                        {currentCard.tags.map((tag) => (
+                          <span key={tag} className="tag-chip">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                </article>
+              </div>
+              <button
+                type="button"
+                className="play-card__arrow play-card__arrow--prev"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  previous();
+                }}
+                disabled={!canGoPrevious}
+                aria-label="Show previous card"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                className="play-card__arrow play-card__arrow--next"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  next();
+                }}
+                disabled={!canGoNext}
+                aria-label="Show next card"
+              >
+                →
+              </button>
+            </>
           ) : (
             <div className="play-card__empty">
               <h2 className="play-card__title">No cards yet</h2>
@@ -121,13 +180,16 @@ export const GamePanel = () => {
             <button className="control-button" onClick={flip} disabled={!progressTotal}>
               Flip
             </button>
+            <button className="control-button" onClick={previous} disabled={!canGoPrevious}>
+              Previous
+            </button>
             <button className="control-button" onClick={() => void markCorrect()} disabled={!progressTotal}>
               Correct
             </button>
             <button className="control-button" onClick={() => void markWrong()} disabled={!progressTotal}>
               Wrong
             </button>
-            <button className="control-button" onClick={next} disabled={!progressTotal}>
+            <button className="control-button" onClick={next} disabled={!canGoNext}>
               Next
             </button>
           </div>
