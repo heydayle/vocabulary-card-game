@@ -11,8 +11,6 @@ export const GamePanel = () => {
     currentCard,
     start,
     flip,
-    markCorrect,
-    markWrong,
     next,
     previous,
     shuffle,
@@ -35,19 +33,13 @@ export const GamePanel = () => {
         event.preventDefault();
         flip();
       }
-      if (event.key.toLowerCase() === 'j') {
-        void markCorrect();
-      }
-      if (event.key.toLowerCase() === 'k') {
-        void markWrong();
-      }
       if (event.key.toLowerCase() === 'n') {
         next();
       }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [flip, markCorrect, markWrong, next]);
+  }, [flip, next]);
 
   const progressTotal = snapshot.deck.length;
   const progressCurrent =
@@ -169,8 +161,7 @@ export const GamePanel = () => {
           <div>
             <h2 className="play-controls__title">Practice Deck</h2>
             <p className="play-controls__description">
-              Flip with <strong>Space</strong>, mark answers with <strong>J</strong> or <strong>K</strong>, and draw next using{' '}
-              <strong>N</strong>.
+              Flip with <strong>Space</strong> and draw the next card using <strong>N</strong>.
             </p>
           </div>
           <div className="play-actions">
@@ -183,12 +174,6 @@ export const GamePanel = () => {
             <button className="control-button" onClick={previous} disabled={!canGoPrevious}>
               Previous
             </button>
-            <button className="control-button" onClick={() => void markCorrect()} disabled={!progressTotal}>
-              Correct
-            </button>
-            <button className="control-button" onClick={() => void markWrong()} disabled={!progressTotal}>
-              Wrong
-            </button>
             <button className="control-button" onClick={next} disabled={!canGoNext}>
               Next
             </button>
@@ -196,9 +181,6 @@ export const GamePanel = () => {
           <div className="play-progress">
             <span className="play-progress__stat">
               Progress: {progressCurrent}/{progressTotal}
-            </span>
-            <span className="play-progress__stat">
-              ✅ {snapshot.correct} &nbsp; ⚠️ {snapshot.wrong}
             </span>
           </div>
         </div>
@@ -209,12 +191,6 @@ export const GamePanel = () => {
             <ul className="play-shortcuts__list">
               <li>
                 <kbd>Space</kbd> Flip
-              </li>
-              <li>
-                <kbd>J</kbd> Mark Correct
-              </li>
-              <li>
-                <kbd>K</kbd> Mark Wrong
               </li>
               <li>
                 <kbd>N</kbd> Next Card
