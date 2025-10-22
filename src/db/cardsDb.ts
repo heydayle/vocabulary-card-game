@@ -38,17 +38,4 @@ export class CardsRepo {
     await cardsDb.cards.delete(id);
   }
 
-  static async incrementCorrect(id: string): Promise<void> {
-    await cardsDb.cards.update(id, {
-      correctCount: (value = 0) => value + 1,
-      updatedAt: Date.now()
-    });
-  }
-
-  static async incrementWrong(id: string): Promise<void> {
-    await cardsDb.cards.update(id, {
-      wrongCount: (value = 0) => value + 1,
-      updatedAt: Date.now()
-    });
-  }
 }

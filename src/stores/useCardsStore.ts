@@ -12,8 +12,6 @@ interface CardsState {
   addCard: (payload: Omit<Card, 'id' | 'createdAt' | 'updatedAt' | 'correctCount' | 'wrongCount'>) => Promise<void>;
   updateCard: (id: string, updates: Partial<Card>) => Promise<void>;
   deleteCard: (id: string) => Promise<void>;
-  recordCorrect: (id: string) => Promise<void>;
-  recordWrong: (id: string) => Promise<void>;
   refresh: () => Promise<void>;
 }
 
@@ -55,22 +53,6 @@ export const useCardsStore = create<CardsState>((set, get) => ({
   deleteCard: async (id) => {
     await CardsRepo.delete(id);
     set({ cards: get().cards.filter((card) => card.id !== id) });
-  },
-  recordCorrect: async (id) => {
-    await CardsRepo.incrementCorrect(id);
-    set({
-      cards: get().cards.map((card) =>
-        card.id === id ? { ...card, correctCount: card.correctCount + 1 } : card
-      )
-    });
-  },
-  recordWrong: async (id) => {
-    await CardsRepo.incrementWrong(id);
-    set({
-      cards: get().cards.map((card) =>
-        card.id === id ? { ...card, wrongCount: card.wrongCount + 1 } : card
-      )
-    });
   },
   refresh: async () => {
     const cards = await CardsRepo.getAll();
