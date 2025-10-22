@@ -6,7 +6,7 @@ export const LearnPage = () => (
         <li>Create or edit cards in your collection.</li>
         <li>Press <strong>Play</strong> to open the liquid glass trainer and draw cards.</li>
         <li>Read the word, pronounce it, then flip to reveal the meaning.</li>
-        <li>Self-assess using Correct/Wrong buttons to track progress.</li>
+        <li>Reflect on how confident you feel before revealing the answer.</li>
         <li>Repeat daily and watch your stats climb!</li>
       </ol>
       <p className="mt-4 text-sm text-slate-200/70">
